@@ -1,3 +1,5 @@
-rss-aggregator.exe
+# Ignore compiled binaries
+*.exe
 
+# Ignore environment file
 .env
