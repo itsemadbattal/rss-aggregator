@@ -43,8 +43,7 @@ func main() {
 		log.Fatal("Cannot connect to databse.")
 	}
 
-	//we need to convert to conn to our package
-
+	//we need to convert to conn to our package so we use database.New()
 	apiCfg := apiConfig{
 		DB: database.New(conn),
 	}
@@ -67,6 +66,7 @@ func main() {
 	v1Router.Get("/err", handlerError)
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
 	v1Router.Get("/users", apiCfg.handlerGetUser)
+	v1Router.Get("/users", apiCfg.handlerGetUserByName)
 
 	router.Mount("/v1", v1Router)
 

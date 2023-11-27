@@ -28,6 +28,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 		w.WriteHeader(500)
 		return
 	}
+
 	//after the marshaling succeeded, we tell that we are writing with JSON format
 	w.Header().Add("Content-Type", "application/json")
 	//we set a status code of the passed in response code to indicate success
