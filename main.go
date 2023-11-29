@@ -2,10 +2,10 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -22,7 +22,13 @@ type apiConfig struct {
 }
 
 func main() {
-	fmt.Println("Hello World")
+	// feed, err := urlToFeed("https://wagslane.dev/index.xml")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(feed)
+
+	// fmt.Println("Hello World")
 
 	//load the .env file
 	godotenv.Load(".env")
@@ -44,11 +50,13 @@ func main() {
 	}
 
 	//we need to convert to conn to our package so we use database.New()
+	db := database.New(conn)
 	apiCfg := apiConfig{
-		DB: database.New(conn),
+		DB: db,
 	}
 
-	// fmt.Printf("PORT: %v", portString)
+	// starting the scraping on a new goroutine
+	go startScraping(db, 10, time.Minute)
 
 	router := chi.NewRouter()
 
@@ -70,6 +78,8 @@ func main() {
 
 	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
 	v1Router.Get("/feeds", apiCfg.handlerGetFeeds)
+
+	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlerGetPostsForUser))
 
 	v1Router.Post("/feed-follows", apiCfg.middlewareAuth(apiCfg.handlerCreateFeedFollow))
 	v1Router.Get("/feed-follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
