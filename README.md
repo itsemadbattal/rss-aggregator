@@ -8,4 +8,4 @@ Tools used:
 2. Database: Postgresql
 3. Goose: Databse migrations https://github.com/pressly/goose
 4. SQLC: Generate type-safe code from raw SQL https://github.com/sqlc-dev/sqlc
-5. Docker to run SQLC Generate
+5. Docker: run SQLC Generate
